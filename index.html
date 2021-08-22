@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      background-color: #000;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+    }
+
+    .dropzone {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .dropzone.active {
+      z-index: 10;
+    }
+  </style>
+
+</head>
+
+<body>
+  <video src="" controls></video>
+
+  <div class="dropzone">
+
+  </div>
+
+  <script>
+    const video = document.querySelector('video');
+    const dropzone = document.querySelector('.dropzone');
+
+    let isInDragMode = false;
+    const setIsInDragMode = state => {
+      isInDragMode = state;
+
+      if (state)
+        dropzone.classList.add('active')
+      else
+        dropzone.classList.remove('active')
+    }
+
+    window.addEventListener('dragenter', () => setIsInDragMode(true));
+    window.addEventListener('dragleave', (evt) => {
+      if (evt.target === dropzone) {
+        setIsInDragMode(false)
+      }
+    });
+
+    dropzone.addEventListener('dragover', (evt) => evt.preventDefault())
+    dropzone.addEventListener('drop', (evt) => {
+      evt.preventDefault();
+      setIsInDragMode(false)
+
+      const files = evt.dataTransfer.files;
+      if (!files[0]) return;
+
+      video.src = URL.createObjectURL(files[0]);
+    })
+
+  </script>
+</body>
+
+</html>
